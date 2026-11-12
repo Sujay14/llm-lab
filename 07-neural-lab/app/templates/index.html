@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEURAL LAB 86 // LLM WORKBENCH</title><link rel="stylesheet" href="/static/style.css"></head>
+<body><div class="scan"></div>
+<header><div class="brand">● NEURAL LAB <b>86</b><small>LLM WORKBENCH / LOCAL INFERENCE</small></div><div class="right"><span id="clock">00:00:00</span><span id="health" class="warn">● CHECKING OLLAMA</span></div></header>
+<main>
+<div class="eyebrow">INTERACTIVE NLP / LANGUAGE MODEL EXPERIMENTS</div>
+<h1>LLM WORKBENCH<span class="cursor">_</span></h1>
+<p class="intro">Choose a task, enter your own text, configure the model and run a real local LLM experiment through Ollama.</p>
+<div class="statusline"><span>ENGINE: OLLAMA</span><span>MODE: LOCAL</span><span>API: <a href="/docs" target="_blank">/DOCS</a></span></div>
+<div class="layout">
+<section class="panel">
+<div class="sectionhead">01 / TASK SELECTOR</div>
+<div class="taskgrid" id="tasks">
+<button class="task active" data-task="sentiment">SENTIMENT</button>
+<button class="task" data-task="ner">NAMED ENTITIES</button>
+<button class="task" data-task="qa">QUESTION ANSWERING</button>
+<button class="task" data-task="translation">TRANSLATION</button>
+<button class="task" data-task="summary">SUMMARIZATION</button>
+<button class="task" data-task="classification">CLASSIFICATION</button>
+<button class="task" data-task="extraction">INFO EXTRACTION</button>
+<button class="task" data-task="paraphrase">PARAPHRASING</button>
+<button class="task" data-task="generation">TEXT GENERATION</button>
+<button class="task" data-task="next_token">NEXT-TEXT CONTINUATION</button>
+<button class="task" data-task="custom">PROMPT LAB</button>
+</div>
+<div class="sectionhead spaced">02 / MODEL CONFIGURATION</div>
+<label>MODEL</label><div class="modelrow"><select id="model"><option value="{{ default_model }}">{{ default_model }}</option></select><button id="refreshModels" class="smallbtn">↻</button></div>
+<label>TEMPERATURE <b id="tempLabel">0.3</b></label><input id="temperature" type="range" min="0" max="2" step="0.1" value="0.3">
+<label>MAX OUTPUT TOKENS <b id="maxLabel">700</b></label><input id="maxTokens" type="range" min="32" max="2048" step="32" value="700">
+<div id="extraOptions"></div>
+</section>
+<section class="panel">
+<div class="sectionhead">03 / INPUT CONSOLE</div>
+<label id="inputLabel">TEXT TO ANALYZE</label>
+<textarea id="inputText" rows="6">The product is amazing, but delivery was extremely slow. Customer support was helpful.</textarea>
+<div id="contextWrap" class="hidden"><label id="contextLabel">REFERENCE CONTEXT</label><textarea id="contextText" rows="5" placeholder="Paste the passage or context here..."></textarea></div>
+<div id="customWrap" class="hidden"><label>CUSTOM SYSTEM INSTRUCTION</label><textarea id="customPrompt" rows="4" placeholder="Tell the model how to behave..."></textarea></div>
+<div class="actions"><button id="run" class="run">▶ RUN LLM TASK</button><button id="stream" class="secondary">▸ STREAM OUTPUT</button><button id="clear" class="secondary">CLEAR</button></div>
+<div id="status" class="status">READY. SELECT A TASK AND RUN THE MODEL.</div>
+</section>
+</div>
+<section class="panel outputpanel">
+<div class="outputhead"><div class="sectionhead">04 / MODEL OUTPUT</div><span id="meta">WAITING FOR INPUT</span></div>
+<pre id="output">Your model response will appear here...</pre>
+<div id="metrics" class="metrics"></div>
+</section>
+<section class="note"><b>LAB NOTE:</b> These tasks use real LLM inference. Output schemas are requested through prompts, not guaranteed by the model. Next-text continuation is not an exact next-token probability inspector; Ollama's standard chat endpoint does not expose logits here. Streaming chunks are text chunks, not guaranteed one-token-at-a-time output.</section>
+<footer>NEURAL LAB 86 <b>//</b> ALL INFERENCE RUNS LOCALLY THROUGH YOUR OLLAMA SERVER.</footer>
+</main><script src="/static/app.js"></script></body></html>
