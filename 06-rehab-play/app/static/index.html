@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07110b">
+<title>REHAB PLAY | Your rehabilitation companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <a class="brand" href="#overview"><span class="brand-icon">✳</span><span>REHAB<span>PLAY</span><small>REHABILITATION COMPANION</small></span></a>
+  <div class="nav-label">WORKSPACE</div>
+  <nav>
+    <a class="nav active" href="#overview"><i>⌂</i> Overview</a>
+    <a class="nav" href="#camera"><i>◉</i> Camera session</a>
+    <a class="nav" href="#plan"><i>▤</i> My care plan</a>
+    <a class="nav" href="#activities"><i>◎</i> Activities</a>
+    <a class="nav" href="#checkin"><i>♡</i> Session check-in</a>
+    <a class="nav" href="#progress"><i>◷</i> Progress journal</a>
+    <a class="nav" href="#assistant"><i>✦</i> AI companion</a>
+  </nav>
+  <div class="side-note"><div class="side-note-icon">♡</div><b>Your pace matters.</b><p>Small, consistent steps deserve to be celebrated.</p></div>
+  <div class="side-footer"><span class="online-dot"></span> PRIVATE DEVICE STORAGE</div>
+</aside>
+
+<main>
+<header class="topbar">
+  <div class="mobile-brand"><span class="brand-icon">✳</span> REHAB<span>PLAY</span></div>
+  <div class="top-date" id="today"></div>
+  <div class="top-right"><span class="streak">✦ <b id="streakTop">0</b> day activity streak</span><div class="profile">R</div></div>
+</header>
+
+<section class="hero" id="overview">
+  <div class="hero-text">
+    <div class="eyebrow">YOUR REHABILITATION SPACE</div>
+    <h1>Progress is personal.<br><em>Every step counts.</em></h1>
+    <p>A calm place to follow your clinician-provided plan, practise approved activities and keep track of how you're feeling.</p>
+    <a class="hero-btn" href="#plan">View my care plan <span>↗</span></a>
+  </div>
+  <div class="hero-graphic" aria-hidden="true">
+    <div class="halo"></div><div class="hero-orbit"></div><div class="hero-flower">✳</div>
+    <div class="hero-quote">ONE DAY AT A TIME<br><b>YOU'RE SHOWING UP.</b></div>
+  </div>
+  <div class="hero-foot">
+    <div><small>ACTIVITY STREAK</small><b>✦ <span id="streakHero">0</span> days</b></div>
+    <div><small>SESSIONS LOGGED</small><b id="sessionsHero">0</b></div>
+    <div><small>ACTIVITIES COMPLETED</small><b id="activitiesHero">0</b></div>
+  </div>
+</section>
+
+<section class="section camera-section" id="camera">
+  <div class="section-head"><div><div class="eyebrow">REAL-TIME MOVEMENT TRACKING</div><h2>Camera exercise studio</h2><p>Use your camera to track repetitions for supported movements in your clinician-approved plan.</p></div><span class="tag live-tag"><i></i> ON-DEVICE POSE TRACKING</span></div>
+  <div class="camera-layout">
+    <div class="camera-panel">
+      <div class="camera-toolbar"><div><span class="camera-live-dot"></span><b id="cameraStatus">Camera is off</b></div><span id="poseStatus">POSE TRACKING READY</span></div>
+      <div class="camera-stage" id="cameraStage">
+        <video id="cameraVideo" playsinline muted></video><canvas id="poseCanvas"></canvas>
+        <div class="camera-placeholder" id="cameraPlaceholder"><div class="camera-placeholder-icon">◉</div><b>Your movement, in real time</b><p>Position your full upper or lower body inside the frame, then start the camera.</p></div>
+        <div class="camera-overlay-label" id="cameraHint">WAITING FOR CAMERA</div>
+      </div>
+      <div class="camera-controls"><button class="primary-btn" id="cameraStart">Start camera</button><button class="outline-btn" id="cameraStop" disabled>Stop</button><span class="camera-device-note">Camera video is processed in your browser.</span></div>
+    </div>
+    <div class="tracking-panel">
+      <div class="tracking-top"><div><span class="eyebrow">EXERCISE TRACKER</span><h3 id="exerciseTitle">Arm raises</h3></div><span class="tracking-pill" id="trackingState">NOT STARTED</span></div>
+      <label class="field-label" for="exerciseSelect">Select a supported movement</label>
+      <select id="exerciseSelect"><option value="arm_raise">Arm raises</option><option value="squat">Squat / sit-to-stand</option><option value="knee_raise">Standing knee raises</option></select>
+      <div class="rep-display"><div><span>REPS COMPLETED</span><strong id="repCount">0</strong></div><div class="rep-divider"></div><div><span>SESSION TIME</span><strong id="sessionTimer">00:00</strong></div></div>
+      <div class="phase-row"><span>Movement phase</span><b id="movementPhase">Waiting</b></div>
+      <div class="phase-track"><div id="phaseBar"></div></div>
+      <div class="tracking-feedback" id="trackingFeedback">Start the camera and stand where your full movement can be seen.</div>
+      <div class="tracking-actions"><button class="outline-btn" id="resetReps">Reset count</button><button class="primary-btn" id="saveCameraSession" disabled>Save session</button></div>
+      <p class="camera-safety">Rep counting is an assistive estimate, not a clinical assessment. Use only movements and targets approved by your clinician. Stop if you feel pain, dizziness or unwell.</p>
+    </div>
+  </div>
+  <div class="camera-footnote"><span>🔒</span> Video is not uploaded or recorded by this app. Pose landmarks are processed locally in your browser. Camera access requires HTTPS on mobile devices, or localhost on the computer.</div>
+</section>
+
+<section class="section" id="plan">
+  <div class="section-head"><div><div class="eyebrow">YOUR CLINICIAN-LED ROUTINE</div><h2>My care plan</h2><p>Record the activities and instructions given by your healthcare professional.</p></div><button class="outline-btn" id="addPlan">＋ Add plan item</button></div>
+  <div class="notice"><span>ⓘ</span><div><b>Your clinician is in charge of your plan.</b><br>REHAB PLAY does not generate treatment plans. Enter only activities and targets provided or approved by your physiotherapist or clinician.</div></div>
+  <div class="plan-list" id="planList"></div>
+  <div class="empty-plan" id="emptyPlan"><div>▤</div><b>Your plan starts here</b><p>Add the exercises or activities your clinician has assigned.</p><button class="primary-btn" id="emptyAdd">Add my first plan item</button></div>
+</section>
+
+<section class="section" id="activities">
+  <div class="section-head"><div><div class="eyebrow">INTERACTIVE PRACTICE</div><h2>Activities & games</h2><p>Simple coordination and attention activities. These are not treatment exercises.</p></div><span class="tag">ADAPTABLE · LOW PRESSURE</span></div>
+  <div class="activity-grid">
+    <article class="activity-card">
+      <div class="activity-head"><div class="activity-icon mint">◎</div><span class="tag">COORDINATION</span></div>
+      <h3>Target tap</h3><p>Tap the highlighted targets as they appear. You can play seated, using a finger or a pointer.</p>
+      <div class="target-game" id="targetGame"><div class="target-instruction" id="targetInstruction">Ready when you are</div><button id="targetDot" aria-label="Target" class="target-dot hidden"></button></div>
+      <div class="activity-foot"><span id="targetScore">0 targets</span><button class="small-btn" id="targetStart">Start activity</button></div>
+    </article>
+    <article class="activity-card">
+      <div class="activity-head"><div class="activity-icon lime">◉</div><span class="tag">ATTENTION</span></div>
+      <h3>Visual focus</h3><p>Find the matching symbol in the grid. Take your time. Accuracy matters more than speed.</p>
+      <div class="focus-game"><div class="focus-prompt">FIND THIS <b id="focusTarget">●</b></div><div class="focus-grid" id="focusGrid"></div></div>
+      <div class="activity-foot"><span id="focusScore">0 correct</span><button class="small-btn" id="focusNew">New round</button></div>
+    </article>
+    <article class="activity-card">
+      <div class="activity-head"><div class="activity-icon purple">▦</div><span class="tag">MEMORY</span></div>
+      <h3>Pattern recall</h3><p>Watch a short sequence of tiles, then repeat it. You can stop at any time.</p>
+      <div class="pattern-game"><div class="pattern-grid" id="patternGrid"></div><div class="pattern-message" id="patternMessage">Press start to see a pattern.</div></div>
+      <div class="activity-foot"><span id="patternLevel">Level 1</span><button class="small-btn" id="patternStart">Start pattern</button></div>
+    </article>
+  </div>
+  <div class="activity-disclaimer">Activities are optional engagement tools, not validated rehabilitation tests. They do not measure clinical ability, diagnose a condition or determine whether an exercise is appropriate.</div>
+</section>
+
+<section class="section" id="checkin">
+  <div class="section-head"><div><div class="eyebrow">BEFORE YOU LOG OFF</div><h2>Session check-in</h2><p>Capture how the session felt. You can share this record with your clinician.</p></div></div>
+  <div class="checkin-card">
+    <div class="checkin-question"><b>How are you feeling today?</b><span>This is a personal check-in, not a medical assessment.</span></div>
+    <div class="mood-options" id="moodOptions">
+      <button data-mood="good"><span>😊</span><b>Good</b></button>
+      <button data-mood="okay"><span>😐</span><b>Okay</b></button>
+      <button data-mood="tired"><span>😴</span><b>Tired</b></button>
+      <button data-mood="uncomfortable"><span>🙁</span><b>Uncomfortable</b></button>
+    </div>
+    <label for="symptomNote">Optional note for your own record</label>
+    <textarea id="symptomNote" rows="3" placeholder="How did your session feel? Any symptoms or observations you'd like to remember?"></textarea>
+    <div class="checkin-actions"><span id="checkinDate"></span><button id="saveCheckin" class="primary-btn">Save check-in</button></div>
+    <div class="checkin-warning">If an activity causes pain, dizziness, unusual breathlessness or other concerning symptoms, stop it. Contact your treating clinician for advice. Seek urgent help for severe or sudden symptoms.</div>
+  </div>
+</section>
+
+<section class="section" id="progress">
+  <div class="section-head"><div><div class="eyebrow">YOUR PERSONAL JOURNAL</div><h2>Progress over time</h2><p>Track participation and reflections, not medical outcomes.</p></div><button class="outline-btn" id="exportData">↓ Export my log</button></div>
+  <div class="progress-grid">
+    <div class="metric-card"><span>SESSIONS LOGGED</span><b id="sessionCount">0</b><small>Check-ins saved</small></div>
+    <div class="metric-card"><span>PLAN ACTIVITIES</span><b id="planCount">0</b><small>Marked complete</small></div>
+    <div class="metric-card"><span>CAMERA REPS</span><b id="cameraRepTotal">0</b><small>Estimated repetitions saved</small></div>
+  </div>
+  <div class="journal-card"><div class="journal-title"><b>Recent check-ins</b><span>STORED ON THIS DEVICE</span></div><div id="journalList" class="journal-list"></div></div>
+</section>
+
+<section class="section" id="assistant">
+  <div class="assistant-card">
+    <div class="assistant-intro"><div class="assistant-symbol">✦</div><div class="eyebrow">LOCAL AI COMPANION</div><h2>Ask REHAB PLAY</h2><p>Get plain-language explanations, organize questions for your physiotherapist, or summarize your own session notes.</p><div id="ollamaStatus" class="ollama-status"><i></i> Checking local Ollama…</div></div>
+    <div class="assistant-chat"><div class="chat-head"><div class="bot-avatar">✳</div><div><b>Rehab companion</b><small>Local model · Educational support only</small></div></div><div id="chatMessages" class="chat-messages"><div class="bot-bubble">Hello! I can help explain general rehab terms or help you understand instructions your clinician has already given you. I can't diagnose or create a treatment plan. 🌿</div></div><div class="chat-compose"><input id="chatInput" maxlength="4000" placeholder="Ask a general question…"><button id="sendChat">↑</button></div><div class="chat-disclaimer">Your message is sent to the Ollama service running on your own computer.</div></div>
+  </div>
+</section>
+
+<footer>REHAB PLAY <span>✳</span> SUPPORTING YOUR CLINICIAN-LED JOURNEY</footer>
+</main>
+</div>
+
+<dialog id="planDialog">
+<form method="dialog" id="planForm">
+  <div class="dialog-head"><div><div class="eyebrow">CLINICIAN-PROVIDED INSTRUCTIONS</div><h2>Add plan item</h2></div><button class="close-btn" value="cancel" aria-label="Close">×</button></div>
+  <label>Activity or exercise name<input id="planName" maxlength="80" placeholder="e.g. Exercise from my printed plan" required></label>
+  <label>Instructions from your clinician<textarea id="planInstructions" rows="3" maxlength="500" placeholder="Enter the instructions exactly as provided"></textarea></label>
+  <div class="form-row"><label>Sets<input id="planSets" type="number" min="1" max="20" placeholder="As prescribed"></label><label>Repetitions / duration<input id="planReps" maxlength="40" placeholder="As prescribed"></label></div>
+  <p class="form-note">Only enter targets prescribed by your clinician. Leave fields blank if no target was provided.</p>
+  <button class="primary-btn full-btn" id="savePlan" value="default">Save plan item</button>
+</form>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="/static/app.js"></script>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+
+  const start = $("cameraStart");
+  const stop = $("cameraStop");
+  const video = $("cameraVideo");
+  const canvas = $("poseCanvas");
+  const ctx = canvas.getContext("2d");
+
+  if (!start || !video || !canvas) {
+    console.error("REHAB PLAY: Camera HTML elements missing.");
+    return;
+  }
+
+  let stream = null;
+  let pose = null;
+  let running = false;
+  let raf = 0;
+  let reps = 0;
+  let phase = "down";
+  let lastRep = 0;
+  let lastVideoTime = -1;
+  let startedAt = 0;
+  let timer = null;
+
+  const status = text => {
+    $("cameraStatus").textContent = text;
+  };
+
+  const feedback = text => {
+    $("trackingFeedback").textContent = text;
+  };
+
+  const phaseText = (text, progress) => {
+    $("movementPhase").textContent = text;
+    $("phaseBar").style.width = progress + "%";
+  };
+
+  function visible(point) {
+    return point && (point.visibility === undefined ||
+                     point.visibility > 0.55);
+  }
+
+  function average(a, b) {
+    return (a.y + b.y) / 2;
+  }
+
+  function updateTimer() {
+    if (!startedAt) return;
+    const seconds = Math.floor((Date.now() - startedAt) / 1000);
+    $("sessionTimer").textContent =
+      String(Math.floor(seconds / 60)).padStart(2, "0") +
+      ":" + String(seconds % 60).padStart(2, "0");
+  }
+
+  function countRep(message) {
+    const now = Date.now();
+    if (now - lastRep < 700) return;
+
+    lastRep = now;
+    reps++;
+    $("repCount").textContent = reps;
+    feedback(message);
+  }
+
+  function drawPose(points) {
+    const w = video.videoWidth;
+    const h = video.videoHeight;
+    if (!w || !h) return;
+
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+
+    ctx.clearRect(0, 0, w, h);
+
+    const connections = [
+      [11,12],[11,13],[13,15],[12,14],[14,16],
+      [11,23],[12,24],[23,24],[23,25],[25,27],
+      [24,26],[26,28]
+    ];
+
+    ctx.strokeStyle = "#76bd8a";
+    ctx.lineWidth = Math.max(3, w * 0.004);
+
+    connections.forEach(([a,b]) => {
+      if (!visible(points[a]) || !visible(points[b])) return;
+      ctx.beginPath();
+      ctx.moveTo(points[a].x*w, points[a].y*h);
+      ctx.lineTo(points[b].x*w, points[b].y*h);
+      ctx.stroke();
+    });
+
+    ctx.fillStyle = "#ffffff";
+    points.forEach(p => {
+      if (!visible(p)) return;
+      ctx.beginPath();
+      ctx.arc(p.x*w, p.y*h, 5, 0, Math.PI*2);
+      ctx.fill();
+    });
+  }
+
+  function track(points) {
+    const exercise = $("exerciseSelect").value;
+
+    const shoulders = [points[11], points[12]];
+    const wrists = [points[15], points[16]];
+    const hips = [points[23], points[24]];
+    const knees = [points[25], points[26]];
+
+    if (exercise === "arm_raise") {
+      if (![...shoulders, ...wrists].every(visible)) {
+        feedback("Keep your shoulders and hands visible.");
+        return;
+      }
+
+      const raised = wrists.every((p,i) =>
+        p.y < shoulders[i].y - 0.07
+      );
+
+      const lowered = wrists.every((p,i) =>
+        p.y > shoulders[i].y + 0.02
+      );
+
+      if (raised && phase === "down") {
+        phase = "up";
+        phaseText("Arms raised", 85);
+        feedback("Good. Lower your arms.");
+      } else if (lowered && phase === "up") {
+        phase = "down";
+        phaseText("Arms lowered", 15);
+        countRep("Arm raise repetition counted.");
+      }
+    }
+
+    if (exercise === "squat") {
+      if (![...hips, ...knees].every(visible)) {
+        feedback("Keep your hips and knees visible.");
+        return;
+      }
+
+      const hipY = average(hips[0], hips[1]);
+      const kneeY = average(knees[0], knees[1]);
+
+      const lowered = hipY > kneeY - 0.02;
+      const upright = hipY < kneeY - 0.13;
+
+      if (lowered && phase === "down") {
+        phase = "up";
+        phaseText("Lowered", 85);
+        feedback("Return to standing.");
+      } else if (upright && phase === "up") {
+        phase = "down";
+        phaseText("Standing", 15);
+        countRep("Standing repetition counted.");
+      }
+    }
+
+    if (exercise === "knee_raise") {
+      if (![points[25],points[26],points[23],points[24]].every(visible)) {
+        feedback("Keep your hips and knees visible.");
+        return;
+      }
+
+      const raised =
+        points[25].y < points[23].y - 0.08 ||
+        points[26].y < points[24].y - 0.08;
+
+      const lowered =
+        points[25].y > points[23].y + 0.02 &&
+        points[26].y > points[24].y + 0.02;
+
+      if (raised && phase === "down") {
+        phase = "up";
+        phaseText("Knee raised", 85);
+        feedback("Bring your foot back down.");
+      } else if (lowered && phase === "up") {
+        phase = "down";
+        phaseText("Foot lowered", 15);
+        countRep("Knee raise repetition counted.");
+      }
+    }
+  }
+
+  async function loadPose() {
+    feedback("Loading pose tracking model...");
+
+    const mp = await import(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/+esm"
+    );
+
+    const files = await mp.FilesetResolver.forVisionTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
+    );
+
+    pose = await mp.PoseLandmarker.createFromOptions(files, {
+      baseOptions: {
+        modelAssetPath:
+          "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+        delegate: "CPU"
+      },
+      runningMode: "VIDEO",
+      numPoses: 1
+    });
+  }
+
+  async function startCamera() {
+    if (running) return;
+
+    start.disabled = true;
+    status("Requesting camera...");
+    feedback("Waiting for camera permission...");
+
+    try {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error("Camera API unavailable. Use Chrome on localhost.");
+      }
+
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          facingMode: "user"
+        },
+        audio: false
+      });
+
+      video.srcObject = stream;
+      await video.play();
+
+      $("cameraPlaceholder").classList.add("hidden");
+      status("Camera active");
+      $("cameraHint").textContent = "CAMERA ACTIVE";
+
+      // Show video even if pose tracking cannot load.
+      feedback("Camera working. Loading movement tracking...");
+
+      await loadPose();
+
+      running = true;
+      reps = 0;
+      phase = "down";
+      lastRep = 0;
+      lastVideoTime = -1;
+      startedAt = Date.now();
+
+      $("repCount").textContent = "0";
+      $("trackingState").textContent = "TRACKING";
+      $("cameraStop").disabled = false;
+      $("saveCameraSession").disabled = false;
+
+      timer = setInterval(updateTimer, 500);
+      feedback("Stand in view of the camera.");
+
+      loop();
+    } catch (error) {
+      console.error("Camera error:", error);
+
+      status("Camera error");
+      start.disabled = false;
+
+      feedback(
+        error.name === "NotAllowedError"
+          ? "Camera permission denied. Allow camera access in Chrome site settings."
+          : error.name === "NotFoundError"
+          ? "No camera detected."
+          : "Camera/tracking error: " + error.message
+      );
+
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+
+      video.srcObject = null;
+    }
+  }
+
+  function loop() {
+    if (!running) return;
+
+    if (video.readyState >= 2 &&
+        video.currentTime !== lastVideoTime) {
+
+      lastVideoTime = video.currentTime;
+
+      try {
+        const result = pose.detectForVideo(video, performance.now());
+
+        if (result.landmarks?.length) {
+          drawPose(result.landmarks[0]);
+          track(result.landmarks[0]);
+        } else {
+          feedback("No body detected. Move into the camera frame.");
+        }
+      } catch (error) {
+        console.error(error);
+        feedback("Pose tracking error. Check the browser console.");
+      }
+    }
+
+    raf = requestAnimationFrame(loop);
+  }
+
+  function stopCamera() {
+    running = false;
+    cancelAnimationFrame(raf);
+    clearInterval(timer);
+
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      stream = null;
+    }
+
+    video.srcObject = null;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    $("cameraPlaceholder").classList.remove("hidden");
+    $("cameraStart").disabled = false;
+    $("cameraStop").disabled = true;
+    $("trackingState").textContent = "PAUSED";
+
+    status("Camera is off");
+    $("cameraHint").textContent = "CAMERA STOPPED";
+  }
+
+  // Replace any previous click handlers with this independent handler.
+  start.onclick = startCamera;
+  stop.onclick = stopCamera;
+
+  $("resetReps").onclick = () => {
+    reps = 0;
+    phase = "down";
+    $("repCount").textContent = "0";
+    phaseText("Ready", 15);
+    feedback("Repetition count reset.");
+  };
+
+  $("saveCameraSession").onclick = () => {
+    if (!startedAt || reps < 1) {
+      feedback("Complete at least one repetition before saving.");
+      return;
+    }
+
+    const sessions = JSON.parse(
+      localStorage.getItem("rehab-play-v1") || "{}"
+    );
+
+    sessions.cameraSessions = sessions.cameraSessions || [];
+    sessions.cameraSessions.unshift({
+      date: new Date().toISOString().slice(0,10),
+      exercise: $("exerciseSelect").value,
+      reps: reps,
+      durationSeconds: Math.floor((Date.now()-startedAt)/1000)
+    });
+
+    localStorage.setItem("rehab-play-v1", JSON.stringify(sessions));
+
+    $("cameraRepTotal").textContent =
+      sessions.cameraSessions.reduce((sum,s) => sum+s.reps, 0);
+
+    feedback("Session saved on this device.");
+  };
+
+  window.addEventListener("pagehide", stopCamera);
+
+  console.log("REHAB PLAY standalone camera controller loaded.");
+})();
+</script>
+
+</body>
+
+</html>
