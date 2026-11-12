@@ -1,0 +1,12 @@
+# Python / env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+
+# Medical data must never be committed
+*.pdf
+data/*
+!data/.gitkeep
+chroma_db/
