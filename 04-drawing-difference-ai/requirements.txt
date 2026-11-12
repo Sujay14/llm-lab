@@ -1,0 +1,10 @@
+pymupdf>=1.24          # primary PDF backend (AGPL). If you can't install it, install the two fallbacks below instead.
+# pypdfium2            # fallback renderer
+# pdfplumber           # fallback text extractor
+opencv-python-headless>=4.8
+numpy>=1.24
+requests>=2.31
+streamlit>=1.35
+anthropic>=0.40        # only for --backend anthropic
+# pytesseract          # only for --ocr (also install the Tesseract binary)
+# reportlab            # only to regenerate samples/
