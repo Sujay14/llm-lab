@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TriageLens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="#top"><span class="logo-mark"></span><span>Triage<em>Lens</em></span></a>
+    <nav class="nav-links">
+      <a href="#queue">Queue</a>
+      <a href="#insights">Insights</a>
+      <a href="#" id="navAbout">How it works</a>
+    </nav>
+    <div class="spacer"></div>
+    <div id="statusPill" class="pill-status" title="Local Llama status"><i></i><span>Checking…</span></div>
+    <button class="btn btn-ghost-light" id="btnSettings">Settings</button>
+    <button class="btn btn-white" id="btnAdd">Add submissions</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Editorial screening assistant</p>
+      <h1>Submission triage, <em>read carefully</em> by a local Llama.</h1>
+      <p class="lede">Classify each manuscript, see which compliance checks apply, and route it to the right specialist. Everything runs on your own machine, so unpublished work never leaves it.</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section class="panel" id="queue">
+    <div class="tabs" id="tabs"></div>
+
+    <div class="toolbar">
+      <div class="search"><span>⌕</span><input id="q" type="search" placeholder="Search title, tag, ID…   ( / )"></div>
+      <select id="fCat"><option value="">All categories</option></select>
+      <select id="fSpec"><option value="">All specialties</option></select>
+      <select id="fCheck"><option value="">Any check</option></select>
+      <div class="spacer"></div>
+      <div id="progress" class="progress hidden"><div id="progressBar"></div><span id="progressText"></span></div>
+      <button class="btn btn-outline" id="btnAnalyzeAll">Analyze all new</button>
+      <a class="btn btn-outline" href="/api/export.csv">Export CSV</a>
+    </div>
+
+    <div class="table-wrap">
+      <table class="queue">
+        <thead>
+          <tr><th>Submitted</th><th>ID</th><th>Title</th><th>Category</th><th>Specialty</th><th>Checks</th><th>Confidence</th><th></th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div id="empty" class="empty hidden">
+        <div class="empty-mark logo-mark"></div>
+        <h3>Your queue is empty</h3>
+        <p>Paste titles, upload a CSV, or load the five sample manuscripts to see how it works.</p>
+        <div class="row">
+          <button class="btn btn-primary" id="btnEmptyAdd">Add submissions</button>
+          <button class="btn btn-outline" id="btnDemo">Load sample queue</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel insights" id="insights">
+    <h2>Queue insights</h2>
+    <div class="ins-grid">
+      <div><h4>By specialty</h4><div id="insSpec"></div></div>
+      <div><h4>Checks most often required</h4><div id="insChecks"></div></div>
+      <div><h4>By category</h4><div id="insCat"></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <div class="logo foot-logo"><span class="logo-mark"></span><span>Triage<em>Lens</em></span></div>
+    <p>A triage aid, not a decision-maker. A human editor should confirm every classification, check and assignment. Not affiliated with any publisher.</p>
+  </div>
+</footer>
+
+<!-- Detail drawer -->
+<div id="scrim" class="scrim hidden"></div>
+<aside id="drawer" class="drawer" aria-hidden="true"></aside>
+
+<!-- Add dialog -->
+<dialog id="addDlg">
+  <form method="dialog" class="dlg-head"><h3>Add submissions</h3><button class="x" aria-label="Close">×</button></form>
+  <div class="dlg-tabs">
+    <button data-t="paste" class="on">Paste titles</button>
+    <button data-t="csv">Upload CSV</button>
+    <button data-t="one">Single, with abstract</button>
+  </div>
+  <div class="dlg-body">
+    <div data-p="paste">
+      <label>One title per line</label>
+      <textarea id="pasteText" rows="8" placeholder="Paste titles here…"></textarea>
+      <div class="dlg-foot"><button class="btn btn-primary" id="goPaste">Add to queue</button></div>
+    </div>
+    <div data-p="csv" class="hidden">
+      <label>CSV with header <code>id,title,abstract,tags</code> (only <code>title</code> is required; separate tags with <code>;</code>)</label>
+      <input type="file" id="csvFile" accept=".csv,text/csv">
+      <div class="dlg-foot"><button class="btn btn-primary" id="goCsv">Import CSV</button></div>
+    </div>
+    <div data-p="one" class="hidden">
+      <label>Title</label><input id="oneTitle" type="text">
+      <label>Abstract <span class="muted">(optional, but improves accuracy a lot)</span></label>
+      <textarea id="oneAbs" rows="6"></textarea>
+      <label>Subject tags <span class="muted">(comma or semicolon separated)</span></label><input id="oneTags" type="text">
+      <div class="dlg-foot"><button class="btn btn-primary" id="goOne">Add and analyze</button></div>
+    </div>
+  </div>
+</dialog>
+
+<!-- Settings dialog -->
+<dialog id="setDlg" class="wide">
+  <form method="dialog" class="dlg-head"><h3>Settings</h3><button class="x" aria-label="Close">×</button></form>
+  <div class="dlg-body">
+    <label>Llama model</label>
+    <div class="row">
+      <select id="setModel"></select>
+      <input id="setModelCustom" type="text" placeholder="or type a model name, e.g. llama3.2:3b">
+    </div>
+    <p class="hint" id="modelHint"></p>
+
+    <label>Checkers / specialists <span class="muted">(one name per line, used in the Assign menu)</span></label>
+    <textarea id="setCheckers" rows="4"></textarea>
+
+    <label>Rules <span class="muted">(specialties with routing keywords, and checks with regex triggers)</span></label>
+    <textarea id="setRules" rows="14" class="mono" spellcheck="false"></textarea>
+    <p class="hint" id="rulesErr"></p>
+    <div class="dlg-foot"><button class="btn btn-primary" id="saveSettings">Save settings</button></div>
+  </div>
+</dialog>
+
+<!-- About dialog -->
+<dialog id="aboutDlg">
+  <form method="dialog" class="dlg-head"><h3>How it works</h3><button class="x" aria-label="Close">×</button></form>
+  <div class="dlg-body about">
+    <p><b>1. Rules first.</b> Keyword and regex rules (editable in Settings) always flag the obvious checks, for example a meta-analysis always needs PRISMA.</p>
+    <p><b>2. Llama adds judgement.</b> The local model reads the title, abstract and tags, then returns the category, study type, specialty, extra checks, points to double-check and a confidence score. It can add checks but never remove a rule-triggered one.</p>
+    <p><b>3. You decide.</b> Override the specialty, tick checks off as you complete them, assign to a person, add notes, and export everything to CSV.</p>
+    <p class="muted">Tip: add abstracts. With titles alone the model is told to lower its confidence.</p>
+  </div>
+</dialog>
+
+<div id="toast" class="toast hidden"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

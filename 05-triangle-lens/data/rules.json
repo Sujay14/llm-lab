@@ -1,0 +1,49 @@
+{
+  "default_specialty": "General Biomedical",
+  "specialties": {
+    "Bioinformatics & Genomics": ["bioinformatics", "genomics", "genetics", "gene expression", "transcriptom", "network pharmacology"],
+    "Oncology": ["oncology", "cancer", "leukemia", "tumor", "carcinoma"],
+    "Neuroscience & Psychiatry": ["neuroscience", "psychiatry", "psychology", "depression", "neuro"],
+    "Gastroenterology & Hepatology": ["gastroenterology", "hepatology", "liver", "cirrhosis", "endoscopy", "variceal"],
+    "Medical AI & Imaging": ["deep learning", "machine learning", "mri", "imaging", "federated", "biomedical engineering", "radiology"],
+    "Orthopedics & Sports Medicine": ["tendon", "orthop", "musculoskeletal", "sports medicine", "ligament"],
+    "Public Health & Epidemiology": ["public health", "epidemiology", "cohort", "population"]
+  },
+  "checks": {
+    "prisma": {
+      "short": "PRISMA",
+      "label": "PRISMA checklist and review registration (systematic review / meta-analysis)",
+      "triggers": ["systematic review", "meta-analysis", "meta analysis", "scoping review"]
+    },
+    "ethics_human": {
+      "short": "Human ethics",
+      "label": "Ethics approval and informed consent (human participants / patient data / human tissue)",
+      "triggers": ["patient", "human", "participants", "volunteers", "donor", "clinical", "cohort", "\\bmri\\b", "cadaver", "biops"]
+    },
+    "ethics_animal": {
+      "short": "Animal ethics",
+      "label": "Animal ethics approval and ARRIVE guidelines",
+      "triggers": ["\\bmice\\b", "\\bmouse\\b", "\\brats?\\b", "zebrafish", "in vivo", "animal model", "rabbit", "porcine"]
+    },
+    "clinical_trial_reg": {
+      "short": "Trial registration",
+      "label": "Clinical trial registration and CONSORT checklist",
+      "triggers": ["randomi[sz]ed", "clinical trial", "placebo", "double-blind"]
+    },
+    "ai_code_data": {
+      "short": "Code & data",
+      "label": "Code and data availability, train/test split and external validation (AI / ML models)",
+      "triggers": ["deep learning", "machine learning", "neural network", "federated", "\\bcnn\\b", "transformer", "classification model", "artificial intelligence"]
+    },
+    "public_data_ids": {
+      "short": "Dataset accessions",
+      "label": "Public dataset accessions cited (GEO / TCGA / etc.) and bioinformatic pipeline reproducibility",
+      "triggers": ["bioinformatic", "\\bgeo\\b", "\\btcga\\b", "differentially expressed", "\\bdeg\\b", "transcriptom", "gene expression", "integrated analysis"]
+    },
+    "computational_validation": {
+      "short": "Validation",
+      "label": "Experimental or independent validation of in-silico results (docking / MD / network pharmacology)",
+      "triggers": ["molecular docking", "molecular dynamics", "network pharmacology", "in silico", "virtual screening"]
+    }
+  }
+}
