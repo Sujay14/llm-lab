@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+outputs/*
+!outputs/.gitkeep
+*.mp3
+*.wav
+*.m4a
+*.mp4
+
+meetings/*.json
+meetings/audio/
